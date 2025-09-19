@@ -2,8 +2,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 import uploadRoutes from './routes/upload.js'
 import authRoutes from './routes/auth.js'
@@ -26,18 +26,21 @@ import inventoryRoutes from './routes/inventory.js'
 
 dotenv.config()
 const app = express()
-const CONNECTION_URL = process.env.ATLAS_URL
-// const CONNECTION_URL = process.env.COMPASS_URL
 
+// ⬇️ Use local MongoDB for testing
+const CONNECTION_URL = process.env.COMPASS_URL
 const PORT = process.env.PORT || 4000
+
+// Middleware
 app.use(cors())
 app.use(express.json())
 
-// serving static files | images
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-app.use('/uploads', express.static(join(__dirname, 'uploads')));
+// Serving static files (images)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+app.use('/uploads', express.static(join(__dirname, 'uploads')))
 
+// Routes
 app.use('/api/v1', uploadRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/user', userRoutes)
@@ -57,10 +60,12 @@ app.use('/api/v1/voucher', voucherRoutes)
 app.use('/api/v1/deduction', deductionRoutes)
 app.use('/api/v1/trasncript', transcriptRoutes)
 
+// Test route
 app.get('/', (req, res) => {
     res.send('Welcome to the server')
 })
 
+// Error handler
 app.use((err, req, res, next) => {
     const message = err.message || 'Something went wrong.'
     const status = err.status || 500
@@ -68,6 +73,13 @@ app.use((err, req, res, next) => {
     next()
 })
 
+// Debug log before connecting to MongoDB
+console.log('Connecting to MongoDB at:', CONNECTION_URL)
+
+// Connect to MongoDB and start server
 mongoose.connect(CONNECTION_URL)
-    .then(() => app.listen(PORT, () => console.log('listening at port ' + PORT)))
-    .catch((err) => console.log('error in connection with mongoDB = \n', err))
+    .then(() => {
+        console.log('MongoDB connection established successfully')
+        app.listen(PORT, () => console.log(`Server listening at port ${PORT}`))
+    })
+    .catch((err) => console.log('Error connecting to MongoDB =\n', err))

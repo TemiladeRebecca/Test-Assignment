@@ -43,7 +43,7 @@ GrowCRM is a comprehensive management system designed to streamline the processe
 
 1. **Clone the Repository**: Use `git clone` to clone this repository to your local machine.
    ```bash
-   git clone
+   git clone https://github.com/TemiladeRebecca/Test-Assignment
    ```
 
 2. Install Dependencies
@@ -53,7 +53,7 @@ a. Frontend (Client)
 
 Navigate to the client directory:
    ```bash
-   cd React-Node-Test/client
+   cd client
    ```
 Install the required dependencies using npm:
    ```bash
@@ -68,7 +68,7 @@ b. Backend (Server)
 
 Navigate to the server directory:
    ```bash
-   cd React-Node-Test/server
+   cd server
    ```
 Install the backend dependencies:
    ```bash
